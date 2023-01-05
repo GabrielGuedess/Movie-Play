@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "movie-c",
+    "slug": "movie-c",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
