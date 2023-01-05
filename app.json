@@ -1,10 +1,13 @@
 {
   "expo": {
-    "name": "movie-c",
-    "slug": "movie-c",
+    "name": "movie-play",
+    "slug": "movie-play",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#000003",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": ["**/*"]
   }
 }
