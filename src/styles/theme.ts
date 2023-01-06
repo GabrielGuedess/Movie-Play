@@ -7,8 +7,8 @@ export default {
     text: '#FFFFFF',
     textDetail: '#A0A0A0',
     border: '#767680',
-    gradientStoke:
-      'linear-gradient(91.33deg, rgba(255, 255, 255, 0.08) 1.08%, rgba(255, 255, 255, 0.04) 48.1%, rgba(255, 255, 255, 0.08) 100%)',
+    box: '#51535E',
+    iconInactive: '#51535D',
   },
   fonts: {
     primaryLight: 'Poppins_300Light',
