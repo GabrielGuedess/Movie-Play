@@ -1,6 +1,4 @@
-import { Dimensions } from 'react-native';
-
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Dimensions, TouchableOpacity } from 'react-native';
 
 import styled from 'styled-components/native';
 

@@ -91,6 +91,7 @@
         "groups": [
           "/^react$/",
           "/^react-native$/",
+          "/^react-native/",
           "/^@react/",
           "/expo/",
           "/^@expo/",
@@ -101,6 +102,7 @@
           "/^screens/",
           "/^components/",
           "/^styled-components/",
+          "/^dtos/",
           "/^assets/",
           "/mock/",
           "/^styles/",

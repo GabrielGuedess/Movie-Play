@@ -3,15 +3,25 @@ import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Home } from 'screens/Home';
+import { Movie } from 'screens/Movie';
 
 import { useTheme } from 'styled-components';
 
-import HomeSvg from 'assets/home.svg';
-import Movie from 'assets/movie.svg';
-import Profile from 'assets/profile.svg';
-import Search from 'assets/search.svg';
+import { MovieDTO } from 'dtos/MovieDTO';
 
-const { Navigator, Screen } = createBottomTabNavigator();
+import HomeSvg from 'assets/home.svg';
+import MovieSvg from 'assets/movie.svg';
+import ProfileSvg from 'assets/profile.svg';
+import SearchSvg from 'assets/search.svg';
+
+export type TabRoutesParamList = {
+  Home: undefined;
+  Movie: MovieDTO;
+  Search: undefined;
+  Profile: undefined;
+};
+
+const { Navigator, Screen } = createBottomTabNavigator<TabRoutesParamList>();
 
 export function TabRoutes() {
   const { colors } = useTheme();
@@ -54,12 +64,12 @@ export function TabRoutes() {
         }}
       />
       <Screen
-        name="Movies"
-        component={Home}
+        name="Movie"
+        component={Movie}
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Movie fill={color} />
+              <MovieSvg fill={color} />
               {focused && (
                 <View
                   style={{
@@ -82,7 +92,7 @@ export function TabRoutes() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Search fill={color} />
+              <SearchSvg fill={color} />
               {focused && (
                 <View
                   style={{
@@ -105,7 +115,7 @@ export function TabRoutes() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Profile fill={color} />
+              <ProfileSvg fill={color} />
               {focused && (
                 <View
                   style={{

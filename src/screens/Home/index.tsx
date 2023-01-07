@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 
 import { useWindowDimensions } from 'react-native';
 
+import Carousel from 'react-native-snap-carousel-v4';
+
+import { useNavigation } from '@react-navigation/native';
+
 import { StatusBar } from 'expo-status-bar';
 
-import { MovieDTO } from 'dtos/MovieDTO';
-import Carousel from 'react-native-snap-carousel-v4';
 import { api } from 'services/api';
 
 import { FilterBox } from 'components/FilterBox';
 import { Search } from 'components/Search';
 import { Slide } from 'components/Slide';
+
+import { MovieDTO } from 'dtos/MovieDTO';
 
 import { filterMock } from './mock';
 
@@ -26,6 +30,7 @@ export function Home() {
   const [topRated, setTopRated] = useState<DataProps>({} as DataProps);
 
   const { width } = useWindowDimensions();
+  const { navigate } = useNavigation();
 
   const slideWidth = width * 0.6;
 
@@ -89,6 +94,7 @@ export function Home() {
             renderItem={({ item }) => (
               <Slide
                 image={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${item.poster_path}`}
+                onPress={() => navigate('Movie', item)}
               />
             )}
             sliderWidth={width}
@@ -105,6 +111,7 @@ export function Home() {
             renderItem={({ item }) => (
               <Slide
                 image={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${item.poster_path}`}
+                onPress={() => navigate('Movie', item)}
               />
             )}
             sliderWidth={width}

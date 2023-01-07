@@ -1,6 +1,9 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
 
-import { TabRoutes } from './tab.routes';
+import { TabRoutes, TabRoutesParamList } from './tab.routes';
+
+export type RootRouteProps<RouteName extends keyof TabRoutesParamList> =
+  RouteProp<TabRoutesParamList, RouteName>;
 
 export function Routes() {
   return (
