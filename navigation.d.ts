@@ -1,7 +1,7 @@
-import { TabRoutesParamList } from './src/routes/tab.routes';
+import { RoutesParams } from './src/routes';
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends TabRoutesParamList {}
+    interface RootParamList extends RoutesParams {}
   }
 }

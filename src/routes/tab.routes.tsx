@@ -2,8 +2,9 @@ import { View } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { StackRoutes } from './stack.routes';
+
 import { Home } from 'screens/Home';
-import { Movie } from 'screens/Movie';
 
 import { useTheme } from 'styled-components';
 
@@ -15,7 +16,7 @@ import ProfileSvg from 'assets/profile.svg';
 import SearchSvg from 'assets/search.svg';
 
 export type TabRoutesParamList = {
-  Home: undefined;
+  StackRoutes: undefined;
   Movie: MovieDTO;
   Search: undefined;
   Profile: undefined;
@@ -41,8 +42,8 @@ export function TabRoutes() {
       }}
     >
       <Screen
-        name="Home"
-        component={Home}
+        name="StackRoutes"
+        component={StackRoutes}
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
@@ -65,7 +66,7 @@ export function TabRoutes() {
       />
       <Screen
         name="Movie"
-        component={Movie}
+        component={Home}
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
