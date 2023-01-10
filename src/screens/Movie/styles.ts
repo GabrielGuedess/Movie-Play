@@ -96,7 +96,7 @@ export const Info = styled.View`
 export const Title = styled.Text`
   ${({ theme }) => css`
     font-family: ${theme.fonts.primarySemiBold};
-    font-size: ${RFValue(24)}px;
+    font-size: ${RFValue(22)}px;
     color: ${theme.colors.text};
   `}
 `;
@@ -109,9 +109,32 @@ export const Details = styled.Text`
   `}
 `;
 
-export const SlideWrapper = styled.View`
+export const WrapperStars = styled.Text`
+  margin-top: ${RFValue(24)}px;
+  flex-direction: row;
+`;
+
+export const WrapperPlot = styled.View`
   width: 100%;
-  margin-top: ${RFValue(36)}px;
+  margin-top: ${RFValue(24)}px;
+`;
+
+export const TitleSecondary = styled.Text`
+  ${({ theme }) => css`
+    font-family: ${theme.fonts.primaryMedium};
+    font-size: ${RFValue(24)}px;
+    color: ${theme.colors.text};
+    margin-bottom: ${RFValue(8)}px;
+  `}
+`;
+
+export const Plot = styled.Text`
+  ${({ theme }) => css`
+    font-family: ${theme.fonts.primaryMedium};
+    font-size: ${RFValue(14)}px;
+    color: ${theme.colors.textDetail};
+    text-align: justify;
+  `}
 `;
 
 export const TitleSlider = styled.Text`
@@ -122,6 +145,11 @@ export const TitleSlider = styled.Text`
     margin-bottom: ${RFValue(26)}px;
     margin-left: ${RFValue(24)}px;
   `}
+`;
+
+export const SlideWrapper = styled.View`
+  width: 100%;
+  margin-top: ${RFValue(36)}px;
 `;
 
 export const VideoModal = styled.View`
