@@ -4,7 +4,7 @@ import { Star, Globe, FilmSlate } from 'phosphor-react-native';
 
 import { useTheme } from 'styled-components';
 
-import Dash from 'assets/dash.svg';
+import Dash from 'assets/svg/dash.svg';
 
 import * as S from './styles';
 

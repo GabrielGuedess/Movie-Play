@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
+
 import {
   Poppins_300Light,
   Poppins_500Medium,
@@ -8,13 +11,17 @@ import {
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { Routes } from 'routes';
+
+import { Auth } from 'screens/Auth';
 
 import { ThemeProvider } from 'styled-components';
 
 import theme from 'styles/theme';
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -49,9 +56,13 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
-        <Routes />
-      </GestureHandlerRootView>
+      <QueryClientProvider client={queryClient}>
+        <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+          <Routes />
+          {/* <Auth /> */}
+          <Toast />
+        </GestureHandlerRootView>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

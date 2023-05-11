@@ -1,16 +1,20 @@
 import LottieView from 'lottie-react-native';
 
-import loadingMovie from 'assets/movie.json';
+import loadingMovie from 'assets/lottie/loading.json';
 
 import * as S from './styles';
 
-export function LoadAnimation() {
+type LoadAnimationProps = {
+  size?: 'normal' | 'small';
+};
+
+export function LoadAnimation({ size = 'normal' }: LoadAnimationProps) {
   return (
     <S.Container>
       <LottieView
         source={loadingMovie}
         autoPlay
-        style={{ height: 200 }}
+        style={{ height: size === 'normal' ? 200 : 60 }}
         resizeMode="contain"
         loop
       />

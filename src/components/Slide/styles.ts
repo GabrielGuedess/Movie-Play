@@ -1,12 +1,30 @@
-import { Dimensions, TouchableOpacity } from 'react-native';
+import { Dimensions } from 'react-native';
 
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
-export const Container = styled(TouchableOpacity)`
-  width: ${Dimensions.get('window').width * 0.6}px;
-  height: 310px;
-  border-radius: ${(Dimensions.get('window').width * 0.6) / 8}px;
-  z-index: 10;
+type ContainerProps = {
+  size: 'normal' | 'small';
+};
+
+const modifiersContainer = {
+  normal: () => css`
+    width: ${Dimensions.get('window').width * 0.6}px;
+  `,
+  small: () => css`
+    width: ${Dimensions.get('window').width * 0.55}px;
+  `,
+  xsmall: () => css`
+    width: ${Dimensions.get('window').width * 0.4}px;
+  `,
+};
+
+export const Container = styled.TouchableOpacity<ContainerProps>`
+  ${({ size }) => css`
+    border-radius: ${(Dimensions.get('window').width * 0.6) / 8}px;
+    z-index: 10;
+
+    ${modifiersContainer[size]}
+  `}
 `;
 
 export const Image = styled.Image`

@@ -1,14 +1,13 @@
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 
+import { LinearGradient } from 'expo-linear-gradient';
+
 import styled, { css } from 'styled-components/native';
 
-export const Container = styled.View`
-  ${({ theme }) => css`
-    position: relative;
-    flex: 1;
-    background: ${theme.colors.background};
-  `}
+export const Container = styled(LinearGradient)`
+  position: relative;
+  flex: 1;
 `;
 
 export const Header = styled.View`
@@ -59,14 +58,9 @@ export const Content = styled.ScrollView.attrs({
   width: 100%;
 `;
 
-export const SearchWrapper = styled.View`
-  margin-top: ${RFValue(36)}px;
-  padding: 0 ${RFValue(24)}px;
-`;
-
 export const FilterWrapper = styled.View`
   width: 100%;
-  margin-top: ${RFValue(36)}px;
+  margin-top: ${RFValue(24)}px;
 `;
 
 export const FilterTitle = styled.Text`
@@ -100,4 +94,10 @@ export const TitleSlider = styled.Text`
     margin-bottom: ${RFValue(26)}px;
     margin-left: ${RFValue(24)}px;
   `}
+`;
+
+export const WrapperLoading = styled.View`
+  min-height: ${RFValue(220)}px;
+  justify-content: center;
+  align-items: center;
 `;

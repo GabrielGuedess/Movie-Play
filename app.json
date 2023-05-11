@@ -8,6 +8,32 @@
       "backgroundColor": "#000003",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ],
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow Movie Play to access the microphone",
+          "speechRecognitionPermission": "CAllow Movie Play to securely recognize user speech"
+        }
+      ]
+    ],
+    "android": {
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.gabrielguedess.movieplay"
+    },
+    "ios": {
+      "bundleIdentifier": "com.gabrielguedess.movieplay"
+    }
   }
 }

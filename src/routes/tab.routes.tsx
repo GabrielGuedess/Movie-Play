@@ -4,20 +4,20 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { StackRoutes } from './stack.routes';
 
-import { Home } from 'screens/Home';
+import { MovieUser } from 'screens/MovieUser';
+import { Profile } from 'screens/Profile';
+import { Search } from 'screens/Search';
 
 import { useTheme } from 'styled-components';
 
-import { MovieDTO } from 'dtos/MovieDTO';
-
-import HomeSvg from 'assets/home.svg';
-import MovieSvg from 'assets/movie.svg';
-import ProfileSvg from 'assets/profile.svg';
-import SearchSvg from 'assets/search.svg';
+import HomeSvg from 'assets/svg/home.svg';
+import MovieSvg from 'assets/svg/movie.svg';
+import ProfileSvg from 'assets/svg/profile.svg';
+import SearchSvg from 'assets/svg/search.svg';
 
 export type TabRoutesParamList = {
   StackRoutes: undefined;
-  Movie: MovieDTO;
+  MovieUser: undefined;
   Search: undefined;
   Profile: undefined;
 };
@@ -65,8 +65,8 @@ export function TabRoutes() {
         }}
       />
       <Screen
-        name="Movie"
-        component={Home}
+        name="MovieUser"
+        component={MovieUser}
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
@@ -89,7 +89,7 @@ export function TabRoutes() {
       />
       <Screen
         name="Search"
-        component={Home}
+        component={Search}
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
@@ -112,7 +112,7 @@ export function TabRoutes() {
       />
       <Screen
         name="Profile"
-        component={Home}
+        component={Profile}
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>

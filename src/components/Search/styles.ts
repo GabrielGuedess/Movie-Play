@@ -7,14 +7,14 @@ export const Container = styled.View`
   flex-direction: row;
   align-items: center;
   width: 100%;
-  padding: ${RFValue(11)}px ${RFValue(6)}px;
+  padding: 0 ${RFValue(6)}px;
   border-radius: ${RFValue(16)}px;
   background: rgba(118, 118, 128, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.2);
 `;
 
 export const IconSearchWrapper = styled.View`
-  padding: 0 ${RFValue(16)}px; ;
+  padding: 0 ${RFValue(16)}px;
 `;
 
 export const Search = styled.TextInput`
@@ -23,10 +23,11 @@ export const Search = styled.TextInput`
     font-family: ${theme.fonts.primaryMedium};
     font-size: ${RFValue(14)}px;
     color: ${theme.colors.textDetail};
+    padding: ${RFValue(11)}px ${RFValue(12)}px;
   `}
 `;
 
-export const IconMicWrapper = styled.View`
+export const IconMicWrapper = styled.TouchableOpacity`
   ${({ theme }) => css`
     padding: 0 ${RFValue(16)}px;
     border-left-width: 1px;

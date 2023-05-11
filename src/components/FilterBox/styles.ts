@@ -10,14 +10,12 @@ export const Container = styled.View`
 `;
 
 export const BoxWrapper = styled(RectButton)`
-  ${({ theme }) => css`
-    width: ${RFValue(52)}px;
-    height: ${RFValue(52)}px;
-    background: ${theme.colors.box};
-    border-radius: ${RFValue(16)}px;
-    justify-content: center;
-    align-items: center;
-  `}
+  width: ${RFValue(52)}px;
+  height: ${RFValue(52)}px;
+  background: rgba(118, 118, 128, 0.15);
+  border-radius: ${RFValue(16)}px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Title = styled.Text`

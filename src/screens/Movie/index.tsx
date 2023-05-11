@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { useWindowDimensions, StyleSheet, Modal } from 'react-native';
+import { useWindowDimensions, StyleSheet } from 'react-native';
 
+import Lightbox from 'react-native-lightbox-v2';
 import Animated, {
   Extrapolate,
   interpolate,
@@ -10,7 +11,6 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { Carousel } from 'react-native-snap-carousel-v4';
-import YoutubePlayer from 'react-native-youtube-iframe';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -19,7 +19,6 @@ import { StatusBar } from 'expo-status-bar';
 import LottieView from 'lottie-react-native';
 import { ArrowLeft, Heart, Play, Star } from 'phosphor-react-native';
 import { rgba } from 'polished';
-import { api } from 'services/api';
 
 import { RootRouteProps } from 'routes';
 
@@ -28,11 +27,13 @@ import { Slide } from 'components/Slide';
 
 import { useTheme } from 'styled-components';
 
+import { tmdb } from 'services/api';
+
+import { CastDTO } from 'dtos/CastDTO';
 import { GalleryDTO } from 'dtos/GalleryDTO';
 import { MovieDetailsDTO } from 'dtos/MovieDetailsDTO';
-import { VideosDTO } from 'dtos/VideosDTO';
 
-import LikeAnimation from 'assets/like.json';
+import LikeAnimation from 'assets/lottie/like.json';
 
 import * as S from './styles';
 
@@ -40,24 +41,18 @@ type GalleryResponse = {
   backdrops: GalleryDTO[];
 };
 
-type VideosResponse = {
-  id: string;
-  results: VideosDTO[];
-};
-
 export function Movie() {
   const [details, setDetails] = useState<MovieDetailsDTO>(
     {} as MovieDetailsDTO,
   );
+  const [cast, setCast] = useState<CastDTO>({} as CastDTO);
   const [gallery, setGallery] = useState<string[]>([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [video, setVideo] = useState('');
   const [like, setLike] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
-  const { goBack } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const { params } = useRoute<RootRouteProps<'Movie'>>();
 
   const voteAverage = Math.round(details.vote_average);
@@ -85,37 +80,42 @@ export function Movie() {
     async function getData() {
       setIsLoading(true);
 
-      const details = await api.get<MovieDetailsDTO>(
-        `/${params.id}?api_key=0b8d03de32e4889351d128d59380611b&language=pt-BR`,
+      const detailsPromise = tmdb.get<MovieDetailsDTO>(
+        `/movie/${params.id}?api_key=0b8d03de32e4889351d128d59380611b&language=pt-BR`,
       );
 
-      const gallery = await api.get<GalleryResponse>(
-        `/${params.id}/images?api_key=0b8d03de32e4889351d128d59380611b`,
+      const castPromise = tmdb.get<CastDTO>(
+        `/movie/${params.id}/credits?api_key=0b8d03de32e4889351d128d59380611b`,
       );
 
-      const videos = await api.get<VideosResponse>(
-        `/${params.id}/videos?api_key=0b8d03de32e4889351d128d59380611b`,
+      const galleryPromise = tmdb.get<GalleryResponse>(
+        `/movie/${params.id}/images?api_key=0b8d03de32e4889351d128d59380611b`,
       );
+
+      const [details, cast, gallery] = await Promise.all([
+        detailsPromise,
+        castPromise,
+        galleryPromise,
+      ]);
 
       const galleryPaths = gallery.data.backdrops
         .map(item => item.file_path)
         .slice(0, 10);
 
-      const videoPaths = videos.data.results.map(item => item.key)[0];
-
       setDetails(details.data);
-      setVideo(videoPaths);
       setGallery(galleryPaths);
+      setCast(cast.data);
 
       setIsLoading(false);
     }
 
     getData();
-  }, [params.id]);
+  }, [params.id, params.title]);
 
   return (
     <S.Container>
       <StatusBar backgroundColor="transparent" style="light" />
+
       {isLoading ? (
         <LoadAnimation />
       ) : (
@@ -164,7 +164,15 @@ export function Movie() {
             />
 
             <S.WrapperButton>
-              <S.ButtonTrailer onPress={() => setOpenModal(true)}>
+              <S.ButtonTrailer
+                onPress={() =>
+                  navigate('Stream', {
+                    title: params.title,
+                    backdrop_path: details.backdrop_path,
+                    tmdId: params.id,
+                  })
+                }
+              >
                 <Play size={24} color={colors.text} weight="fill" />
               </S.ButtonTrailer>
             </S.WrapperButton>
@@ -224,6 +232,31 @@ export function Movie() {
             </S.Info>
 
             <S.SlideWrapper>
+              <S.TitleSlider>Elenco</S.TitleSlider>
+
+              <Carousel
+                vertical={false}
+                data={cast.cast}
+                activeSlideOffset={10}
+                activeSlideAlignment="start"
+                containerCustomStyle={{ marginHorizontal: 24 }}
+                renderItem={({ item }) => (
+                  <>
+                    <Slide
+                      size="xsmall"
+                      image={`https://www.themoviedb.org/t/p/original/${item.profile_path}`}
+                      as={Lightbox}
+                      isGallery
+                    />
+                    <S.DetailsCast>{item.name}</S.DetailsCast>
+                  </>
+                )}
+                sliderWidth={width}
+                itemWidth={width * 0.4}
+              />
+            </S.SlideWrapper>
+
+            <S.SlideWrapper>
               <S.TitleSlider>Galeria</S.TitleSlider>
 
               <Carousel
@@ -232,6 +265,8 @@ export function Movie() {
                 renderItem={({ item }) => (
                   <Slide
                     image={`https://www.themoviedb.org/t/p/original/${item}`}
+                    as={Lightbox}
+                    isGallery
                   />
                 )}
                 sliderWidth={width}
@@ -239,22 +274,6 @@ export function Movie() {
               />
             </S.SlideWrapper>
           </Animated.ScrollView>
-
-          <Modal
-            visible={openModal}
-            statusBarTranslucent
-            onRequestClose={() => setOpenModal(false)}
-          >
-            <S.VideoModal>
-              <S.Header>
-                <S.WrapperBackButton onPress={() => setOpenModal(false)}>
-                  <ArrowLeft size={24} color={colors.text} />
-                </S.WrapperBackButton>
-              </S.Header>
-
-              <YoutubePlayer height={300} play videoId={video} />
-            </S.VideoModal>
-          </Modal>
         </>
       )}
     </S.Container>
