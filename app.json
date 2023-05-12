@@ -8,7 +8,9 @@
       "backgroundColor": "#000003",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "plugins": [
       [
         "expo-screen-orientation",
@@ -31,11 +33,18 @@
       ]
     ],
     "android": {
-      "permissions": ["android.permission.RECORD_AUDIO"],
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "package": "com.gabrielguedess.movieplay"
     },
     "ios": {
       "bundleIdentifier": "com.gabrielguedess.movieplay"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7406a630-3d4e-4557-9152-94b02f62501e"
+      }
     }
   }
 }
