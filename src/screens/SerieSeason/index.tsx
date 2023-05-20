@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { ScrollView } from 'react-native';
 
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BottomSheet from '@gorhom/bottom-sheet';
 import { ArrowLeft, ArrowRight } from 'phosphor-react-native';
@@ -40,6 +40,7 @@ export const SerieSeason = () => {
   const [selectedEpisode, setSelectedEpisode] = useState(0);
 
   const { colors } = useTheme();
+  const { navigate } = useNavigation();
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -108,6 +109,16 @@ export const SerieSeason = () => {
                   <S.WrapperEpisodeInfo
                     key={episode.id}
                     activeOpacity={0.7}
+                    onPress={() => {
+                      navigate('StreamSerie', {
+                        backdrop_path: episode.still_path,
+                        episodeNumber: episode.episode_number,
+                        seasonNumber: episode.season_number,
+                        tmdbId: params.id,
+                        name: episode.name,
+                      });
+                      console.log(params.id);
+                    }}
                     onLongPress={() => handleOpenPress({ index })}
                   >
                     <S.Image

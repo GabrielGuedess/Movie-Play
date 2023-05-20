@@ -8,9 +8,7 @@
       "backgroundColor": "#000003",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "plugins": [
       [
         "expo-screen-orientation",
@@ -33,9 +31,7 @@
       ]
     ],
     "android": {
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
+      "permissions": ["android.permission.RECORD_AUDIO"],
       "package": "com.gabrielguedess.movieplay"
     },
     "ios": {
@@ -45,6 +41,10 @@
       "eas": {
         "projectId": "7406a630-3d4e-4557-9152-94b02f62501e"
       }
+    },
+    "runtimeVersion": "exposdk:48.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/7406a630-3d4e-4557-9152-94b02f62501e"
     }
   }
 }

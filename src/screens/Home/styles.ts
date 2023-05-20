@@ -37,12 +37,9 @@ export const HeaderDescription = styled.Text`
 `;
 
 export const PhotoWrapper = styled.View`
-  ${({ theme }) => css`
-    width: ${RFValue(52)}px;
-    height: ${RFValue(52)}px;
-    background: ${theme.colors.main};
-    border-radius: ${RFValue(26)}px;
-  `}
+  width: ${RFValue(52)}px;
+  height: ${RFValue(52)}px;
+  border-radius: ${RFValue(26)}px;
 `;
 
 export const Photo = styled.Image`

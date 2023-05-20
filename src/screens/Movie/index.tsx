@@ -169,7 +169,7 @@ export function Movie() {
                   navigate('Stream', {
                     title: params.title,
                     backdrop_path: details.backdrop_path,
-                    tmdId: params.id,
+                    tmdbId: params.id,
                   })
                 }
               >

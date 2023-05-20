@@ -5,12 +5,9 @@ import { Dimensions } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { ResizeMode, Video } from 'expo-av';
-import * as FileSystem from 'expo-file-system';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
 
-import axios from 'axios';
-import { toSlug } from 'helpers/slug';
 import { ArrowLeft } from 'phosphor-react-native';
 
 import { RootRouteProps } from 'routes';
@@ -21,15 +18,20 @@ import { useTheme } from 'styled-components/native';
 
 import { api } from 'services/api';
 
+import { SerieApiDTO } from 'dtos/SerieApiDTO';
+import { StreamSerieDTO } from 'dtos/StreamSerieDTO';
+
 import * as S from './styles';
 
-export function Stream() {
-  const [movie, setMovie] = useState('');
+type RequestProps = Omit<StreamSerieDTO, 'backdrop_path'>;
+
+export function StreamSerie() {
+  const [serie, setSerie] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const video = useRef<Video>(null);
 
-  const { params } = useRoute<RootRouteProps<'Stream'>>();
+  const { params } = useRoute<RootRouteProps<'StreamSerie'>>();
   const { goBack } = useNavigation();
   const { colors } = useTheme();
 
@@ -46,31 +48,18 @@ export function Stream() {
       try {
         setIsLoading(true);
 
-        const { data } = await api.post('/movies', {
-          name: toSlug(params.title),
+        const { data } = await api.post<
+          SerieApiDTO,
+          { data: SerieApiDTO },
+          RequestProps
+        >('/series', {
+          name: params.name,
           tmdbId: params.tmdbId,
+          episodeNumber: params.episodeNumber,
+          seasonNumber: params.seasonNumber,
         });
 
-        if (data.type === 'm3u8') {
-          const movieLink = await axios({
-            baseURL: data.movie.url,
-            headers: {
-              accept: '*/*',
-              Referer: 'https://playembeds.com',
-            },
-          });
-
-          const fileUri =
-            FileSystem.documentDirectory + `${encodeURI('movie')}.m3u8`;
-
-          await FileSystem.writeAsStringAsync(fileUri, movieLink.data, {
-            encoding: FileSystem.EncodingType.UTF8,
-          });
-
-          return setMovie(fileUri);
-        }
-
-        setMovie(data.movie.url);
+        setSerie(data.serie.season.episode.url);
       } catch (error) {
         console.error(error);
       } finally {
@@ -79,7 +68,7 @@ export function Stream() {
     }
 
     getData();
-  }, [params.tmdbId, params.title]);
+  }, [params.episodeNumber, params.name, params.tmdbId, params.seasonNumber]);
 
   return (
     <S.Wrapper>
@@ -98,7 +87,7 @@ export function Stream() {
           <S.VideoStream
             ref={video}
             source={{
-              uri: movie,
+              uri: serie,
             }}
             usePoster
             isLooping

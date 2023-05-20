@@ -17,7 +17,7 @@ export const iptv = axios.create({
 });
 
 export const api = axios.create({
-  baseURL: 'https://7389-2804-431-c7cc-52dd-5cfd-20bc-b204-ecc6.ngrok-free.app',
+  baseURL: 'https://api-movie-play.onrender.com',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
