@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import {
   Keyboard,
   ScrollView,
@@ -7,6 +9,7 @@ import {
 
 import { Carousel } from 'react-native-snap-carousel-v4';
 
+import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
 import { useNavigation } from '@react-navigation/native';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -45,15 +48,18 @@ type SearchSchemaProps = {
 };
 
 export const Search = () => {
+  const [start, setStart] = useState(false);
+
   const { colors } = useTheme();
   const { navigate } = useNavigation();
   const { width } = useWindowDimensions();
 
-  const { control, handleSubmit, getValues } = useForm<SearchSchemaProps>({
-    defaultValues: {
-      search: null,
-    },
-  });
+  const { control, handleSubmit, getValues, setValue } =
+    useForm<SearchSchemaProps>({
+      defaultValues: {
+        search: null,
+      },
+    });
 
   const moviesSearch = useQuery<DataMovieProps>(
     'moviesSearch',
@@ -82,6 +88,31 @@ export const Search = () => {
     seriesSearch.refetch();
   };
 
+  const speechResultsHandler = (e: SpeechResultsEvent) => {
+    setValue('search', e.value![0] ?? '');
+  };
+
+  const startRecording = async () => {
+    setStart(true);
+
+    await Voice.start('pt-BR');
+  };
+
+  const stopRecording = async () => {
+    await Voice.stop();
+
+    setStart(false);
+  };
+
+  useEffect(() => {
+    Voice.onSpeechResults = speechResultsHandler;
+
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>
       <S.Container
@@ -100,7 +131,11 @@ export const Search = () => {
                 <SearchComponent
                   onChangeText={onChange}
                   value={value ?? ''}
+                  startVoice={start}
+                  handleStartVoice={startRecording}
+                  handleStopVoice={stopRecording}
                   onSubmitEditing={handleSubmit(reFetchAllData)}
+                  onBlur={handleSubmit(reFetchAllData)}
                   returnKeyType="done"
                 />
               )}

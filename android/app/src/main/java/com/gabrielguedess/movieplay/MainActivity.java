@@ -1,5 +1,7 @@
 package com.gabrielguedess.movieplay;
 
+import com.google.android.gms.cast.framework.CastContext;
+
 import android.os.Build;
 import android.os.Bundle;
 
@@ -12,11 +14,14 @@ import expo.modules.ReactActivityDelegateWrapper;
 public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    // Set the theme to AppTheme BEFORE onCreate to support 
+    // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null);
+// @generated begin react-native-google-cast-onCreate - expo prebuild (DO NOT MODIFY) sync-db583defdeb0226930ad5278e6c069db65777d42
+    CastContext.getSharedInstance(this);
+// @generated end react-native-google-cast-onCreate
   }
 
   /**

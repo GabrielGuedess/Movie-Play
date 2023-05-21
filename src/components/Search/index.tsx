@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { TextInputProps } from 'react-native';
-
-import Voice, {
-  SpeechErrorEvent,
-  SpeechResultsEvent,
-} from '@react-native-voice/voice';
 
 import { MagnifyingGlass } from 'phosphor-react-native';
 
@@ -15,40 +10,19 @@ import Mic from 'assets/svg/mic.svg';
 
 import * as S from './styles';
 
-export function Search({ ...props }: TextInputProps) {
-  const [start, setStart] = useState(false);
-  const [results, setResults] = useState<string[] | undefined>([]);
+type SearchProps = {
+  startVoice: boolean;
+  handleStartVoice: () => void;
+  handleStopVoice: () => void;
+} & TextInputProps;
 
+export function Search({
+  startVoice = false,
+  handleStartVoice,
+  handleStopVoice,
+  ...props
+}: SearchProps) {
   const { colors } = useTheme();
-
-  const handleStartSpeechToText = async () => {
-    await Voice.start('pt-BR');
-
-    setStart(true);
-  };
-
-  const handleStopSpeech = async () => {
-    await Voice.stop();
-
-    setStart(false);
-  };
-
-  const onSpeechResults = async (result: SpeechResultsEvent) => {
-    setResults(result.value);
-  };
-
-  const onSpeechError = async (error: SpeechErrorEvent) => {
-    console.error(error);
-  };
-
-  useEffect(() => {
-    Voice.onSpeechError = onSpeechError;
-    Voice.onSpeechResults = onSpeechResults;
-
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
-  }, []);
 
   return (
     <S.Container>
@@ -56,15 +30,15 @@ export function Search({ ...props }: TextInputProps) {
         <MagnifyingGlass size={24} color={colors.text} weight="bold" />
       </S.IconSearchWrapper>
 
-      <S.Search value={results?.join(' ')} {...props} />
+      <S.Search {...props} />
 
       <S.IconMicWrapper
-        onPress={start ? handleStopSpeech : handleStartSpeechToText}
+        onPress={startVoice ? handleStopVoice : handleStartVoice}
       >
         <Mic
           width={24}
           height={24}
-          color={start ? colors.main : colors.border}
+          color={startVoice ? colors.main : colors.border}
         />
       </S.IconMicWrapper>
     </S.Container>

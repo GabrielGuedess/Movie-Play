@@ -14,6 +14,7 @@ import { Carousel } from 'react-native-snap-carousel-v4';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+import * as ScreenOrientation from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
 
 import LottieView from 'lottie-react-native';
@@ -111,6 +112,10 @@ export function Movie() {
 
     getData();
   }, [params.id, params.title]);
+
+  useEffect(() => {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+  }, []);
 
   return (
     <S.Container>

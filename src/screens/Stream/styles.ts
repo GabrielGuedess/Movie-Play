@@ -35,6 +35,48 @@ export const WrapperBackButton = styled(RectButton)`
   `}
 `;
 
+export const ChromeCast = styled.View`
+  ${({ theme }) => css`
+    position: relative;
+    min-width: 36px;
+    min-height: 36px;
+    background: ${rgba(theme.colors.text, 0.3)};
+    padding: 6px;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+  `}
+`;
+
+export const VideoWrapper = styled.View`
+  position: relative;
+  width: 100%;
+`;
+
 export const VideoStream = styled(Video)`
   width: 100%;
+`;
+
+export const WrapperIcon = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  justify-content: center;
+  align-items: center;
+  padding: ${RFValue(13)}px;
+`;
+
+export const LoadingMessage = styled.Text`
+  ${({ theme }) => css`
+    font-family: ${theme.fonts.primaryLight};
+    font-size: ${RFValue(12)}px;
+    text-align: center;
+    color: ${theme.colors.textDetail};
+    margin-top: ${RFValue(24)}px;
+  `}
 `;

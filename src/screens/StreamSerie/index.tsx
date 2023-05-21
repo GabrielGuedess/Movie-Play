@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Dimensions } from 'react-native';
+import { Animated, Dimensions, Easing, ScrollView } from 'react-native';
+
+import { CastButton } from 'react-native-google-cast';
+import Toast from 'react-native-toast-message';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -8,7 +11,7 @@ import { ResizeMode, Video } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
 
-import { ArrowLeft } from 'phosphor-react-native';
+import { ArrowLeft, CircleNotch } from 'phosphor-react-native';
 
 import { RootRouteProps } from 'routes';
 
@@ -28,8 +31,11 @@ type RequestProps = Omit<StreamSerieDTO, 'backdrop_path'>;
 export function StreamSerie() {
   const [serie, setSerie] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
 
   const video = useRef<Video>(null);
+
+  const spinValue = new Animated.Value(0);
 
   const { params } = useRoute<RootRouteProps<'StreamSerie'>>();
   const { goBack } = useNavigation();
@@ -42,6 +48,25 @@ export function StreamSerie() {
       ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
     }
   }
+  const rotate = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  const spin = () => {
+    spinValue.setValue(0);
+    Animated.timing(spinValue, {
+      toValue: 1,
+      duration: 600,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => spin());
+  };
+
+  useEffect(() => {
+    spin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, isVideoLoading]);
 
   useEffect(() => {
     async function getData() {
@@ -61,7 +86,11 @@ export function StreamSerie() {
 
         setSerie(data.serie.season.episode.url);
       } catch (error) {
-        console.error(error);
+        Toast.show({
+          text1: 'Série',
+          text2: 'Série não encontrado!',
+          type: 'error',
+        });
       } finally {
         setIsLoading(false);
       }
@@ -82,31 +111,72 @@ export function StreamSerie() {
             <S.WrapperBackButton onPress={() => goBack()}>
               <ArrowLeft size={24} color={colors.text} />
             </S.WrapperBackButton>
+
+            <S.ChromeCast>
+              <CastButton
+                style={{ width: 24, height: 24, tintColor: 'white' }}
+              />
+            </S.ChromeCast>
           </S.Header>
 
-          <S.VideoStream
-            ref={video}
-            source={{
-              uri: serie,
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-            usePoster
-            isLooping
-            shouldPlay
-            useNativeControls
-            style={{ aspectRatio: '16/9' }}
-            resizeMode={ResizeMode.CONTAIN}
-            onFullscreenUpdate={setOrientation}
-            posterSource={{
-              uri: `https://www.themoviedb.org/t/p/original${params.backdrop_path}`,
-            }}
-            onLoadStart={() => {
-              video?.current?.presentFullscreenPlayer().then(() => {
-                ScreenOrientation.lockAsync(
-                  ScreenOrientation.OrientationLock.LANDSCAPE,
-                );
-              });
-            }}
-          />
+            showsVerticalScrollIndicator={false}
+          >
+            <S.VideoWrapper>
+              {isVideoLoading && (
+                <>
+                  <S.WrapperIcon>
+                    <Animated.View style={{ transform: [{ rotate }] }}>
+                      <CircleNotch size={40} color={colors.error} />
+                    </Animated.View>
+                  </S.WrapperIcon>
+                </>
+              )}
+
+              <S.VideoStream
+                ref={video}
+                source={{
+                  uri: serie,
+                }}
+                usePoster
+                isLooping
+                shouldPlay
+                useNativeControls
+                style={{ aspectRatio: '16/9' }}
+                resizeMode={ResizeMode.CONTAIN}
+                onFullscreenUpdate={setOrientation}
+                onError={() => {
+                  setIsVideoLoading(false);
+
+                  Toast.show({
+                    text1: 'Série',
+                    text2: 'Série não encontrado!',
+                    type: 'error',
+                  });
+                }}
+                onReadyForDisplay={() => setIsVideoLoading(false)}
+                posterSource={{
+                  uri: `https://www.themoviedb.org/t/p/original${params.backdrop_path}`,
+                }}
+                onLoadStart={() => {
+                  video?.current?.presentFullscreenPlayer().then(() => {
+                    ScreenOrientation.lockAsync(
+                      ScreenOrientation.OrientationLock.LANDSCAPE,
+                    );
+                  });
+                }}
+              />
+            </S.VideoWrapper>
+
+            {isVideoLoading && (
+              <S.LoadingMessage>Carregando Player</S.LoadingMessage>
+            )}
+          </ScrollView>
         </>
       )}
     </S.Wrapper>

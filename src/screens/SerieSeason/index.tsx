@@ -117,7 +117,6 @@ export const SerieSeason = () => {
                         tmdbId: params.id,
                         name: episode.name,
                       });
-                      console.log(params.id);
                     }}
                     onLongPress={() => handleOpenPress({ index })}
                   >

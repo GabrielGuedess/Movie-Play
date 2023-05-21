@@ -10,6 +10,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "plugins": [
+      ["@config-plugins/react-native-google-cast"],
       [
         "expo-screen-orientation",
         {
